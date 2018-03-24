@@ -1,4 +1,4 @@
-package ca.ciccc.java;
+package ca.ciccc.java.main;
 
 import ca.ciccc.java.model.Model;
 
@@ -52,8 +52,6 @@ public class Main {
         // Print model1 after setting all variables
         System.out.println("\nModel (First constructor - All variables setted with valid values):");
         model1.printDetails();
-        System.out.println("Height in feet and inches: " + model1.getHeightInFeetAndInches());
-        System.out.println("Weight in kg: " + model1.getWeightKg());
 
         /* ========================================================== */
 
@@ -67,10 +65,17 @@ public class Main {
         // Print model1 after setting variables with invalid values
         System.out.println("\nModel (First constructor - All variables setted with invalid values):");
         model1.printDetails();
-        System.out.println("Height in feet and inches: " + model1.getHeightInFeetAndInches());
-        System.out.println("Weight in kg: " + model1.getWeightKg());
 
         /* ========================================================== */
+        /* Testing all 'displayModelDetails' with and without parameter */
+        System.out.println("\nPrinting details using imperial units: ");
+        model2.displayModelDetails();
+
+        System.out.println("\nPrinting details using metric units: ");
+        model3.displayModelDetails(true);
+
+        /* ========================================================== */
+
         /* Testing toString */
         System.out.println("\nToString:");
         System.out.println(model1.toString());

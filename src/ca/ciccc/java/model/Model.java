@@ -23,8 +23,15 @@ public class Model {
     private boolean smokes;
     private static String occupation = "modeling";
 
-    private static int INCHES_PER_FOOT = 12;
-    private static float POUNDS_PER_KG = 2.2f;
+    public static final int INCHES_PER_FOOT = 12;
+    public static final float POUNDS_PER_KG = 2.2f;
+    public static final float CM_PER_INCH = 2.54f;
+    public static final int BASE_RATE_DOLLARS_PER_HOUR = 60;
+    public static final int TALL_INCHES = 67;
+    public static final double THIN_POUNDS = 140.0;
+    public static final int TALL_THIN_BONUS_DOLLARS_PER_HOUR = 5;
+    public static final int TRAVEL_BONUS_DOLLARS_PER_HOUR = 4;
+    public static final int SMOKER_DEDUCTION_DOLLARS_PER_HOUR = 10;
 
     /**
      * Constructor without parameters
@@ -274,6 +281,15 @@ public class Model {
     }
 
     /**
+     * Convert height from inches to cm and return it
+     *
+     * @return height in cm
+     */
+    public int getHeightCm(){
+        return Math.round(this.getHeightInInches() * CM_PER_INCH);
+    }
+
+    /**
      * Print all the details about the model
      */
     public void printDetails(){
@@ -293,10 +309,81 @@ public class Model {
         }
     }
 
+    /**
+     * Calculates a model's per-hour pay rate and returns the amount.
+     *
+     * @return dollars per hour
+     */
+    public int calculatePayDollarsPerHour() {
+        int dollarsPerHour = BASE_RATE_DOLLARS_PER_HOUR;
+
+        if(this.getHeightInInches() >= TALL_INCHES && this.getWeightInPounds() <= THIN_POUNDS){
+            dollarsPerHour += TALL_THIN_BONUS_DOLLARS_PER_HOUR;
+        }
+
+        if(this.getCanTravel()){
+            dollarsPerHour += TRAVEL_BONUS_DOLLARS_PER_HOUR;
+        }
+
+        if(this.getSmokes()) {
+            dollarsPerHour -= SMOKER_DEDUCTION_DOLLARS_PER_HOUR;
+        }
+
+        return dollarsPerHour;
+    }
+
+    /**
+     * Displays all the model's information on the screen.
+     */
+    public void displayModelDetails() {
+        System.out.println("Name: " + this.getFirstName() + " " + getLastName());
+        System.out.println("Height: " + this.getHeightInFeetAndInches());
+        System.out.println("Weight: " + Math.round(this.getWeightInPounds()) + " pounds");
+
+        this.printCanTravelSmokesAndHourlyRate();
+    }
+
+    /**
+     * Displays all the model's information on the screen, but it can specifies
+     * whether the weight should be in metric (kg and cm) or imperial (lb and inches) units
+     *
+     * @param metricUnits
+     */
+    public void displayModelDetails(boolean metricUnits) {
+        if(metricUnits){
+            System.out.println("Name: " + this.getFirstName() + " " + getLastName());
+            System.out.println("Height: " + this.getHeightCm() + " cm");
+            System.out.println("Weight: " + Math.round(this.getWeightKg()) + " kg");
+
+            this.printCanTravelSmokesAndHourlyRate();
+        } else {
+            this.displayModelDetails();
+        }
+    }
+
+    /**
+     * Used to print the informations about 'canTravel', 'smokes' and 'payDollarsPerHour'
+     */
+    private void printCanTravelSmokesAndHourlyRate(){
+        if(this.getCanTravel()){
+            System.out.println("Travels: Yep");
+        }else{
+            System.out.println("Travels: Nope");
+        }
+        if(this.getSmokes()){
+            System.out.println("Smokes: Yep");
+        }else{
+            System.out.println("Smokes: Nope");
+        }
+
+        System.out.println("Hourly rate: $" + this.calculatePayDollarsPerHour());
+    }
+
     @Override
     public String toString() {
         return "Model["+this.getFirstName()+", "+this.getLastName()+", "
                 +this.getHeightInInches()+", "+this.getWeightInPounds()+", "
-                +this.getCanTravel()+", "+this.getSmokes()+", "+Model.getOccupation()+"]";
+                +this.getCanTravel()+", "+this.getSmokes()+", "+Model.getOccupation()+"" +
+                +this.calculatePayDollarsPerHour()+"]";
     }
 }
